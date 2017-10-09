@@ -1,5 +1,5 @@
 {
-  "name": "date-time",
+  "name": "@wazio/date-time",
   "version": "0.1.0",
   "description": "JavaScript/TypeScript DateTime library",
   "main": "./dist/date-time.umd.js",

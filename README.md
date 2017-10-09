@@ -16,7 +16,7 @@ npm test
 
 ### Usage
 ```typescript
-import { DateTime, TimeSpan } from 'date-time';
+import { DateTime, TimeSpan } from '@wazio/date-time';
 
 // format
 DateTime.format(new Date(2017, 5, 12, 16, 30), 'yyyy-MM-dd hh:mm tt'); // will output '2017-06-12 04:30 PM'
