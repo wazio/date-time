@@ -23,3 +23,21 @@ export declare function addZeroPrefix(value: number | string, expectedLength: nu
  * @returns {number}
  */
 export declare function relativeFloor(value: number): number;
+/**
+ * Copy the values of all of the enumerable own properties from one or more source objects to a target object.
+ * Returns the target object.
+ * ES6 polyfill.
+ *
+ * @param target: object
+ * @param sources: any[]
+ * @returns {any}
+ */
+export declare function assign(target: object, ...sources: any[]): any;
+/**
+ * Returns the sign of the x, indicating whether x is positive, negative or zero.
+ * ES6 polyfill.
+ *
+ * @param x: number
+ * @returns {number}
+ */
+export declare function sign(x: number): 1 | 0 | -1;

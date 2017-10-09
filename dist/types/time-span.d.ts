@@ -16,8 +16,7 @@ export declare class TimeSpan {
     private _totalMilliseconds;
     constructor(milliseconds: number);
     constructor(hours: number, minutes: number, seconds: number);
-    constructor(days: number, hours: number, minutes: number, seconds: number);
-    constructor(days: number, hours: number, minutes: number, seconds: number, milliseconds: number);
+    constructor(days: number, hours: number, minutes: number, seconds: number, milliseconds?: number);
     /**
      * Returns the days component of the time interval represented by the current TimeSpan structure.
      *

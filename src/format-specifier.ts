@@ -1,4 +1,5 @@
 import { DateBuilderParams } from './date-time';
+import { assign } from './utils';
 
 export interface IFormatSpecifierConstructorParams {
   code: string;
@@ -47,7 +48,7 @@ export class FormatSpecifier {
   static createInstance(params: IFormatSpecifierConstructorParams): FormatSpecifier {
     const hasReverseAbility: boolean = !!(params.toDateName || params.toDateFn);
 
-    return Object.assign(new FormatSpecifier(), params, {
+    return assign(new FormatSpecifier(), params, {
       hasReverseAbility,
       length: hasReverseAbility ? params.length || params.code.length : undefined,
     });

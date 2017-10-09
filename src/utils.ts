@@ -31,5 +31,35 @@ export function addZeroPrefix(value: number | string, expectedLength: number): s
  * @returns {number}
  */
 export function relativeFloor(value: number): number {
-  return Math.sign(value) * Math.floor(Math.abs(value));
+  return sign(value) * Math.floor(Math.abs(value));
+}
+
+/**
+ * Copy the values of all of the enumerable own properties from one or more source objects to a target object.
+ * Returns the target object.
+ * ES6 polyfill.
+ *
+ * @param target: object
+ * @param sources: any[]
+ * @returns {any}
+ */
+export function assign(target: object, ...sources: any[]): any {
+  sources.forEach(source => {
+    Object.keys(source).forEach(key => {
+      (target as any)[key] = (source as any)[key];
+    });
+  });
+
+  return target as any;
+}
+
+/**
+ * Returns the sign of the x, indicating whether x is positive, negative or zero.
+ * ES6 polyfill.
+ *
+ * @param x: number
+ * @returns {number}
+ */
+export function sign(x: number): 1 | 0 | -1 {
+  return x > 0 ? 1 : x < 0 ? -1 : 0;
 }

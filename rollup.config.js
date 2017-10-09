@@ -1,4 +1,5 @@
 import sourceMaps from 'rollup-plugin-sourcemaps';
+
 const pkg = require('./package.json');
 
 export default {

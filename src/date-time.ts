@@ -1,7 +1,7 @@
 import { FormatSpecifiers } from './format-specifiers';
 import { FormatSpecifier } from './format-specifier';
 import { TimeSpan } from './time-span';
-import { msInTimeUnits } from './utils';
+import { assign, msInTimeUnits } from './utils';
 
 export interface IFormatTraverseCallback {
   (
@@ -66,7 +66,7 @@ export class DateTime {
 
         if (formatSpecifier.hasReverseAbility) {
           specifierTimeValue = datetime.substring(traverseParams.startAt, traverseParams.endAt);
-          Object.assign(dateBuilderParams, formatSpecifier.toDateFn(specifierTimeValue));
+          assign(dateBuilderParams, formatSpecifier.toDateFn(specifierTimeValue));
         }
       }
     });
@@ -116,7 +116,7 @@ export class DateTime {
    * @returns {Date}
    */
   private static buildDate(params: DateBuilderParams): Date {
-    const allParams: DateBuilderParams = Object.assign(new DateBuilderParams(), params);
+    const allParams: DateBuilderParams = assign(new DateBuilderParams(), params);
 
     if (allParams.isAfterNoon) {
       allParams.hour += allParams.hour < 12 ? 12 : 0;

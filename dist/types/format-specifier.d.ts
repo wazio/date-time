@@ -28,13 +28,16 @@ export declare class FormatSpecifier {
      */
     toValueFn: (date: Date) => string;
     /**
+     * Objects created by createInstance static method.
+     */
+    private constructor();
+    /**
      * Creates new instance of FormatSpecifier from given params.
      *
      * @param params
      * @returns {FormatSpecifier}
      */
     static createInstance(params: IFormatSpecifierConstructorParams): FormatSpecifier;
-    private constructor();
     /**
      * Returns value converted into DateBuilderParams.
      *

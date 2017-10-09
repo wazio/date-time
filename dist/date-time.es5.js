@@ -1,37 +1,4 @@
 /**
- * FormatSpecifier class
- */
-var FormatSpecifier = (function () {
-    function FormatSpecifier() {
-    }
-    /**
-     * Creates new instance of FormatSpecifier from given params.
-     *
-     * @param params
-     * @returns {FormatSpecifier}
-     */
-    FormatSpecifier.createInstance = function (params) {
-        var hasReverseAbility = !!(params.toDateName || params.toDateFn);
-        return Object.assign(new FormatSpecifier(), params, {
-            hasReverseAbility: hasReverseAbility,
-            length: hasReverseAbility ? params.length || params.code.length : undefined,
-        });
-    };
-    /**
-     * Returns value converted into DateBuilderParams.
-     *
-     * @param value: string
-     * @returns {Partial<DateBuilderParams>}
-     */
-    FormatSpecifier.prototype.toDateFn = function (value) {
-        var params = {};
-        params[this.toDateName] = parseInt(value, 10);
-        return params;
-    };
-    return FormatSpecifier;
-}());
-
-/**
  * Milliseconds in time units object.
  */
 var msInTimeUnits = {
@@ -62,8 +29,75 @@ function addZeroPrefix(value, expectedLength) {
  * @returns {number}
  */
 function relativeFloor(value) {
-    return Math.sign(value) * Math.floor(Math.abs(value));
+    return sign(value) * Math.floor(Math.abs(value));
 }
+/**
+ * Copy the values of all of the enumerable own properties from one or more source objects to a target object.
+ * Returns the target object.
+ * ES6 polyfill.
+ *
+ * @param target: object
+ * @param sources: any[]
+ * @returns {any}
+ */
+function assign(target) {
+    var sources = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        sources[_i - 1] = arguments[_i];
+    }
+    sources.forEach(function (source) {
+        Object.keys(source).forEach(function (key) {
+            target[key] = source[key];
+        });
+    });
+    return target;
+}
+/**
+ * Returns the sign of the x, indicating whether x is positive, negative or zero.
+ * ES6 polyfill.
+ *
+ * @param x: number
+ * @returns {number}
+ */
+function sign(x) {
+    return x > 0 ? 1 : x < 0 ? -1 : 0;
+}
+
+/**
+ * FormatSpecifier class
+ */
+var FormatSpecifier = (function () {
+    /**
+     * Objects created by createInstance static method.
+     */
+    function FormatSpecifier() {
+    }
+    /**
+     * Creates new instance of FormatSpecifier from given params.
+     *
+     * @param params
+     * @returns {FormatSpecifier}
+     */
+    FormatSpecifier.createInstance = function (params) {
+        var hasReverseAbility = !!(params.toDateName || params.toDateFn);
+        return assign(new FormatSpecifier(), params, {
+            hasReverseAbility: hasReverseAbility,
+            length: hasReverseAbility ? params.length || params.code.length : undefined,
+        });
+    };
+    /**
+     * Returns value converted into DateBuilderParams.
+     *
+     * @param value: string
+     * @returns {Partial<DateBuilderParams>}
+     */
+    FormatSpecifier.prototype.toDateFn = function (value) {
+        var params = {};
+        params[this.toDateName] = parseInt(value, 10);
+        return params;
+    };
+    return FormatSpecifier;
+}());
 
 /**
  * FormatSpecifiers class
@@ -112,12 +146,12 @@ var FormatSpecifiers = (function () {
         yy: FormatSpecifier.createInstance({
             code: 'yy',
             toDateName: 'year',
-            toValueFn: function (date) { return addZeroPrefix((date.getFullYear() % 100), 2); },
+            toValueFn: function (date) { return addZeroPrefix(date.getFullYear() % 100, 2); },
         }),
         yyy: FormatSpecifier.createInstance({
             code: 'yyy',
             toDateName: 'year',
-            toValueFn: function (date) { return addZeroPrefix((date.getFullYear() % 1000), 3); },
+            toValueFn: function (date) { return addZeroPrefix(date.getFullYear() % 1000, 3); },
         }),
         yyyy: FormatSpecifier.createInstance({
             code: 'yyyy',
@@ -171,12 +205,12 @@ var FormatSpecifiers = (function () {
         t: FormatSpecifier.createInstance({
             code: 't',
             toDateFn: function (value) { return ({ isAfterNoon: value === 'P' }); },
-            toValueFn: function (date) { return date.getHours() === 0 || date.getHours() < 12 ? 'A' : 'P'; },
+            toValueFn: function (date) { return (date.getHours() === 0 || date.getHours() < 12 ? 'A' : 'P'); },
         }),
         tt: FormatSpecifier.createInstance({
             code: 'tt',
             toDateFn: function (value) { return ({ isAfterNoon: value === 'PM' }); },
-            toValueFn: function (date) { return date.getHours() === 0 || date.getHours() < 12 ? 'AM' : 'PM'; },
+            toValueFn: function (date) { return (date.getHours() === 0 || date.getHours() < 12 ? 'AM' : 'PM'); },
         }),
         /// Minute
         m: FormatSpecifier.createInstance({
@@ -232,8 +266,8 @@ var TimeSpan = (function () {
             this._totalMilliseconds = a * msInTimeUnits.hour + b * msInTimeUnits.minute + c * msInTimeUnits.second;
         }
         else {
-            this._totalMilliseconds = a * msInTimeUnits.day + b * msInTimeUnits.hour + c * msInTimeUnits.minute +
-                d * msInTimeUnits.second + (e || 0);
+            this._totalMilliseconds =
+                a * msInTimeUnits.day + b * msInTimeUnits.hour + c * msInTimeUnits.minute + d * msInTimeUnits.second + (e || 0);
         }
     }
     Object.defineProperty(TimeSpan.prototype, "days", {
@@ -243,8 +277,7 @@ var TimeSpan = (function () {
          * @returns {number}
          */
         get: function () {
-            return this._days ||
-                (this._days = relativeFloor(this._totalMilliseconds / msInTimeUnits.day));
+            return this._days || (this._days = relativeFloor(this._totalMilliseconds / msInTimeUnits.day));
         },
         enumerable: true,
         configurable: true
@@ -256,8 +289,7 @@ var TimeSpan = (function () {
          * @returns {number}
          */
         get: function () {
-            return this._hours ||
-                (this._hours = relativeFloor(this._totalMilliseconds / msInTimeUnits.hour % 24));
+            return this._hours || (this._hours = relativeFloor((this._totalMilliseconds / msInTimeUnits.hour) % 24));
         },
         enumerable: true,
         configurable: true
@@ -269,8 +301,7 @@ var TimeSpan = (function () {
          * @returns {number}
          */
         get: function () {
-            return this._minutes ||
-                (this._minutes = relativeFloor(this._totalMilliseconds / msInTimeUnits.minute % 60));
+            return this._minutes || (this._minutes = relativeFloor((this._totalMilliseconds / msInTimeUnits.minute) % 60));
         },
         enumerable: true,
         configurable: true
@@ -282,8 +313,7 @@ var TimeSpan = (function () {
          * @returns {number}
          */
         get: function () {
-            return this._seconds ||
-                (this._seconds = relativeFloor(this._totalMilliseconds / msInTimeUnits.second % 60));
+            return this._seconds || (this._seconds = relativeFloor((this._totalMilliseconds / msInTimeUnits.second) % 60));
         },
         enumerable: true,
         configurable: true
@@ -295,8 +325,7 @@ var TimeSpan = (function () {
          * @returns {number}
          */
         get: function () {
-            return this._milliseconds ||
-                (this._milliseconds = relativeFloor(this._totalMilliseconds % 1000));
+            return this._milliseconds || (this._milliseconds = relativeFloor(this._totalMilliseconds % 1000));
         },
         enumerable: true,
         configurable: true
@@ -308,8 +337,7 @@ var TimeSpan = (function () {
          * @returns {number}
          */
         get: function () {
-            return this._totalDays ||
-                (this._totalDays = this._totalMilliseconds / msInTimeUnits.day);
+            return this._totalDays || (this._totalDays = this._totalMilliseconds / msInTimeUnits.day);
         },
         enumerable: true,
         configurable: true
@@ -321,8 +349,7 @@ var TimeSpan = (function () {
          * @returns {number}
          */
         get: function () {
-            return this._totalHours ||
-                (this._totalHours = this._totalMilliseconds / msInTimeUnits.hour);
+            return this._totalHours || (this._totalHours = this._totalMilliseconds / msInTimeUnits.hour);
         },
         enumerable: true,
         configurable: true
@@ -334,8 +361,7 @@ var TimeSpan = (function () {
          * @returns {number}
          */
         get: function () {
-            return this._totalMinutes ||
-                (this._totalMinutes = this._totalMilliseconds / msInTimeUnits.minute);
+            return this._totalMinutes || (this._totalMinutes = this._totalMilliseconds / msInTimeUnits.minute);
         },
         enumerable: true,
         configurable: true
@@ -347,8 +373,7 @@ var TimeSpan = (function () {
          * @returns {number}
          */
         get: function () {
-            return this._totalSeconds ||
-                (this._totalSeconds = this._totalMilliseconds / msInTimeUnits.second);
+            return this._totalSeconds || (this._totalSeconds = this._totalMilliseconds / msInTimeUnits.second);
         },
         enumerable: true,
         configurable: true
@@ -388,8 +413,7 @@ var DateTime = (function () {
     function DateTime() {
     }
     /**
-     * Converts the value of the given Date object to its equivalent string representation
-     * using the specified format.
+     * Converts the value of the given Date object to its equivalent string representation using the specified format.
      *
      * @param date: Date
      * @param format: string
@@ -398,15 +422,14 @@ var DateTime = (function () {
     DateTime.format = function (date, format) {
         var result = '';
         this.traverseFormat(format, function (traverseParams) {
-            result += traverseParams.isSpecifier ?
-                FormatSpecifiers.get(traverseParams.code).toValueFn(date) :
-                traverseParams.code;
+            result += traverseParams.isSpecifier
+                ? FormatSpecifiers.get(traverseParams.code).toValueFn(date)
+                : traverseParams.code;
         });
         return result;
     };
     /**
-     * Converts the specified string representation of a date and time to its Date equivalent
-     * using the specified format.
+     * Converts the specified string representation of a date and time to its Date equivalent using the specified format.
      *
      * @param datetime: string
      * @param format: string
@@ -421,7 +444,7 @@ var DateTime = (function () {
                 formatSpecifier = FormatSpecifiers.get(traverseParams.code);
                 if (formatSpecifier.hasReverseAbility) {
                     specifierTimeValue = datetime.substring(traverseParams.startAt, traverseParams.endAt);
-                    Object.assign(dateBuilderParams, formatSpecifier.toDateFn(specifierTimeValue));
+                    assign(dateBuilderParams, formatSpecifier.toDateFn(specifierTimeValue));
                 }
             }
         });
@@ -466,15 +489,15 @@ var DateTime = (function () {
      * @returns {Date}
      */
     DateTime.buildDate = function (params) {
-        var allParams = Object.assign(new DateBuilderParams(), params);
+        var allParams = assign(new DateBuilderParams(), params);
         if (allParams.isAfterNoon) {
             allParams.hour += allParams.hour < 12 ? 12 : 0;
         }
         return new Date(allParams.year, allParams.month - 1, allParams.day, allParams.hour, allParams.minute, allParams.second, allParams.millisecond);
     };
     /**
-     * Traverse given date format and trigger callback function for every format specifier from
-     * FormatSpecifiers or for single, unfamiliar letter.
+     * Traverse given date format and trigger callback function for every format specifier from FormatSpecifiers or for
+     * single, unfamiliar letter.
      *
      * @param format: string
      * @param callback: IFormatTraverseCallback
