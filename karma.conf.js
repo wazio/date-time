@@ -1,7 +1,7 @@
 // Karma configuration
 
 module.exports = function (config) {
-  config.set({
+  const configuration = {
     basePath: '',
     frameworks: ['jasmine', 'karma-typescript'],
     files: [
@@ -17,7 +17,19 @@ module.exports = function (config) {
     logLevel: config.LOG_INFO,
     autoWatch: true,
     browsers: ['Chrome'],
+    customLaunchers: {
+      Chrome_travis_ci: {
+        base: 'Chrome',
+        flags: ['--no-sandbox']
+      }
+    },
     singleRun: false,
     concurrency: Infinity
-  })
+  };
+
+  if (process.env.TRAVIS) {
+    configuration.browsers = ['Chrome_travis_ci'];
+  }
+
+  config.set(configuration);
 };
