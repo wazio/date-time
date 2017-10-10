@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/wazio/date-time.svg?branch=master)](https://travis-ci.org/wazio/date-time)
+[![Coverage Status](https://coveralls.io/repos/github/wazio/date-time/badge.svg?branch=master)](https://coveralls.io/github/wazio/date-time?branch=master)
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
 # DateTime
