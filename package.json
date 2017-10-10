@@ -18,11 +18,13 @@
     "test": "karma start --singleRun",
     "test-lint": "tslint -c tslint.json '{src,test}/**/*.ts'",
     "reformat": "prettier --config ./.prettierrc --write \"./{src,test}/*.ts\"",
-    "build": "tsc && rollup -c rollup.config.js && rimraf compiled"
+    "build": "tsc && rollup -c rollup.config.js && rimraf compiled",
+    "report-coverage": "cat ./coverage/lcov.info | coveralls"
   },
   "dependencies": {},
   "devDependencies": {
     "@types/jasmine": "^2.5.53",
+    "coveralls": "^3.0.0",
     "jasmine-core": "^2.7.0",
     "karma": "^1.7.0",
     "karma-chrome-launcher": "^2.2.0",

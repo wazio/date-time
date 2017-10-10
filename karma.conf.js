@@ -24,7 +24,21 @@ module.exports = function (config) {
       }
     },
     singleRun: false,
-    concurrency: Infinity
+    concurrency: Infinity,
+    karmaTypescriptConfig: {
+      reports: {
+        "html": {
+          directory: "coverage",
+          subdirectory: "."
+        },
+        "lcovonly": {
+          directory: "coverage",
+          subdirectory: ".",
+          filename: "lcov.info"
+        },
+        "text-summary": ""
+      }
+    }
   };
 
   if (process.env.TRAVIS) {
