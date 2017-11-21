@@ -56,6 +56,10 @@ describe('DateTime', () => {
         ),
       ).toBe('P PM 50,4,3,9 7/9/22');
     });
+    it('should skip specifiers with no reverse ability', () => {
+      const date: Date = DateTime.parseExact('7:03:04:500', 'H:mm:ss:fff');
+      expect(DateTime.format(date, 'H:mm:ss:fff')).toBe('0:03:04:500');
+    });
   });
 
   describe('subtract', () => {
@@ -79,6 +83,9 @@ describe('DateTime', () => {
       expect(DateTime.subtract(tomorrowBeforeNowHour, now).days).toBe(0);
       expect(DateTime.subtract(tomorrowAfterNowHour, now).days).toBe(1);
     });
+    it('should have second date equal now by default', () => {
+      expect(DateTime.subtract(new Date()).totalSeconds).toBe(0);
+    });
   });
 
   describe('subtractDate', () => {
@@ -98,6 +105,9 @@ describe('DateTime', () => {
       expect(DateTime.subtractDate(yesterdayAfterNowHour, now).days).toBe(-1);
       expect(DateTime.subtractDate(tomorrowBeforeNowHour, now).days).toBe(1);
       expect(DateTime.subtractDate(tomorrowAfterNowHour, now).days).toBe(1);
+    });
+    it('should have second date equal now by default', () => {
+      expect(DateTime.subtractDate(new Date()).totalSeconds).toBe(0);
     });
   });
 });
